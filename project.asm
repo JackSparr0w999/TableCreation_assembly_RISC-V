@@ -2,25 +2,25 @@
 
 .data
 table: .space 20
-info: .asciz "Numero colonne: " #salvate in a0
-info2: .asciz "Numero righe: "  #salvate in a0
-spazio3: .word 0		       #la stringa è salvata in memoria
-info3: .asciz "Titoli: "
+info: .asciz "Columns number: " #saved in s0
+info2: .asciz "Rows number: "  #saved in s1
+spazio3: .word 0		            #the string is saved in memory
+info3: .asciz "Cells name: "
 
 
 
 .text
 main:
-#blocco chiedo colonne ce le ho in s0    
+#asking for colums, they will be saved in s0    
 la a0, info
 li a7, 4
 ecall
 
 li a7, 5
-ecall #ora il numero letto è in a0
+ecall # by default the integer entered by the user is saved in a0
 mv s0, a0
 
-#blocco chiedo righe ce le ho in s1
+#asking for rows, they will be saved in s1
 la a0, info2
 li a7, 4
 ecall
@@ -29,7 +29,7 @@ li a7, 5
 ecall
 mv s1, a0
 
-#blocco chiedo titolo
+#asking for cells name
 la a0, info3
 li a7, 4
 ecall
@@ -39,27 +39,27 @@ la a0, table
 li a1, 20
 ecall
 
-mv s6, a0 # mi serve per capire lunghezza riga "-----"
+mv s6, a0 # i need it to understand the length of the row "-----"
 
 li t0, '\n'
 
-#######
+####### i have to remove "/n", saved by default in the input in order to prevent the string from wrapping
 mv s6, a0
-li s7, 0 # copmtatore caratteri
+li s7, 0 # character counter
 ###li t0, '\n'
-# parto da indirizzo e base e continuo a scorrere i byte della string afinchè trovo /n
+# starting from the base address and continue to scroll through the bytes of the string until I find "/n"
 
 loop0:
-lb s3, 0(s6) #primo carattere stringa in s2
+lb s3, 0(s6) #first string character in s3
 beq s3, t0, exit
 addi s7, s7, 1
-addi s6, s6, 1 #incremento indirizzo
+addi s6, s6, 1 #increasing address
 j loop0
 
 exit:
-#in s7 ho lunghezza caratteri
+#in s7 i have the final length of the characters
 
-########
+######## it's 2 am and I'm tired of translating
 
 mv t2, a0 #in t2 ho partenza indirizzo titolo
 li t4, 0
